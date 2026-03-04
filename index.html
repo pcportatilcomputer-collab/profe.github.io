@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>¡Cazador de Fracciones!</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --sky:#fef9f0;
+  --green:#4ecb71;--green2:#3ab85e;
+  --yellow:#ffd93d;--orange:#ff9f1c;
+  --pink:#ff6b9d;--blue:#4da6ff;
+  --purple:#7c3aed;--purple2:#b388ff;
+  --red:#ff5252;--dark:#2d2d44;--ink:#3d2c8d;
+  --light-ink:#7c6fcd;
+}
+html,body{min-height:100%;background:var(--sky);font-family:'Nunito',sans-serif;color:var(--dark);overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;z-index:0;
+  background:radial-gradient(ellipse 120% 60% at 50% -10%,#c8f0ff 0%,transparent 60%),
+    radial-gradient(circle at 10% 90%,#d4f5e2 0%,transparent 40%),
+    radial-gradient(circle at 90% 80%,#fff0d4 0%,transparent 40%);
+  pointer-events:none;}
+.fe{position:fixed;font-size:1.8rem;opacity:.16;z-index:0;animation:floatUp 14s linear infinite;}
+.fe:nth-child(1){left:5%;animation-delay:0s;}
+.fe:nth-child(2){left:22%;animation-delay:3s;font-size:1.5rem;}
+.fe:nth-child(3){left:43%;animation-delay:6s;font-size:2rem;}
+.fe:nth-child(4){left:65%;animation-delay:1.5s;}
+.fe:nth-child(5){left:82%;animation-delay:9s;font-size:1.4rem;}
+.fe:nth-child(6){left:93%;animation-delay:4s;}
+@keyframes floatUp{0%{transform:translateY(105vh) rotate(0);opacity:0;}10%{opacity:.16;}90%{opacity:.16;}100%{transform:translateY(-10vh) rotate(360deg);opacity:0;}}
+.wrap{position:relative;z-index:1;max-width:680px;margin:0 auto;padding:16px 16px 40px;}
+/* HEADER */
+.hdr{background:linear-gradient(135deg,#7c3aed,#4da6ff);border-radius:24px;padding:18px 24px 14px;text-align:center;box-shadow:0 8px 30px rgba(124,58,237,.25),0 2px 0 rgba(255,255,255,.3)inset;margin-bottom:14px;position:relative;overflow:hidden;}
+.hdr::after{content:'';position:absolute;top:-30px;right:-30px;width:120px;height:120px;border-radius:50%;background:rgba(255,255,255,.07);}
+.hdr h1{font-family:'Fredoka One',cursive;font-size:clamp(1.5rem,5vw,2.2rem);color:#fff;text-shadow:0 3px 0 rgba(0,0,0,.2);}
+.hdr .tag{color:rgba(255,255,255,.82);font-size:.83rem;font-weight:700;margin-top:2px;}
+/* STATS */
+.sr{display:flex;gap:10px;margin-bottom:14px;}
+.sp{flex:1;background:#fff;border-radius:16px;padding:10px 8px;text-align:center;box-shadow:0 4px 12px rgba(0,0,0,.08);border:2px solid transparent;transition:transform .2s;}
+.sp:hover{transform:translateY(-2px);}
+.sp.l{border-color:#ffb3c6;}.sp.pt{border-color:#b3e5fc;}.sp.st{border-color:#c8e6c9;}.sp.lv{border-color:#e1bee7;}
+.sp .si{font-size:1.3rem;display:block;line-height:1;}
+.sp .sv{font-family:'Fredoka One',cursive;font-size:1.4rem;line-height:1;color:var(--ink);}
+.sp .sl{font-size:.6rem;font-weight:800;color:#aaa;text-transform:uppercase;letter-spacing:1px;}
+/* TABS */
+.tabs{display:flex;gap:8px;margin-bottom:14px;}
+.tb{flex:1;padding:10px;border-radius:14px;border:none;cursor:pointer;font-family:'Fredoka One',cursive;font-size:1rem;transition:all .2s;box-shadow:0 4px 10px rgba(0,0,0,.08);}
+.tb.tl{background:#fff0b3;color:#b8860b;}.tb.tp{background:#d4edff;color:#1565c0;}
+.tb.active.tl{background:var(--yellow);color:#6d3a00;transform:scale(1.04);box-shadow:0 6px 18px rgba(255,217,61,.4);}
+.tb.active.tp{background:var(--blue);color:#fff;transform:scale(1.04);box-shadow:0 6px 18px rgba(77,166,255,.4);}
+/* TUTORIAL */
+.tut{background:#fff;border-radius:24px;padding:22px 18px;box-shadow:0 6px 24px rgba(0,0,0,.07);display:none;}
+.tut.active{display:block;}
+.tut h2{font-family:'Fredoka One',cursive;font-size:1.5rem;color:var(--purple2);margin-bottom:2px;}
+.tut .intro{color:#999;font-size:.82rem;margin-bottom:18px;}
+.ts{display:flex;gap:12px;align-items:flex-start;background:#fafafa;border-radius:16px;padding:13px;margin-bottom:11px;border-left:5px solid var(--green);transition:transform .2s;}
+.ts:hover{transform:translateX(4px);}
+.ts:nth-of-type(2){border-left-color:var(--blue);}
+.ts:nth-of-type(3){border-left-color:var(--yellow);}
+.ts:nth-of-type(4){border-left-color:var(--orange);}
+.ts:nth-of-type(5){border-left-color:var(--pink);}
+.tn{min-width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Fredoka One',cursive;font-size:1rem;color:#fff;flex-shrink:0;background:var(--green);box-shadow:0 3px 8px rgba(78,203,113,.4);}
+.ts:nth-of-type(2) .tn{background:var(--blue);}
+.ts:nth-of-type(3) .tn{background:var(--yellow);color:var(--dark);}
+.ts:nth-of-type(4) .tn{background:var(--orange);}
+.ts:nth-of-type(5) .tn{background:var(--pink);}
+.tb2 h3{font-size:.92rem;font-weight:800;color:var(--ink);margin-bottom:3px;}
+.tb2 p{font-size:.8rem;color:#555;line-height:1.6;}
+.tbox{background:linear-gradient(135deg,#f0f4ff,#e8f5ff);border-radius:12px;padding:10px 14px;margin-top:7px;font-size:.81rem;line-height:1.9;border:1px dashed #b3d0ff;color:var(--ink);}
+.tbox .ho{color:var(--orange);font-weight:800;}
+.tbox .hg{color:var(--green2);font-weight:800;}
+.tbox .hp{color:#9c27b0;font-weight:800;}
+.fbanner{background:linear-gradient(135deg,var(--purple),var(--blue));border-radius:16px;padding:14px 20px;text-align:center;color:#fff;font-size:.88rem;font-weight:700;line-height:1.9;box-shadow:0 6px 20px rgba(124,58,237,.25);margin-top:12px;}
+.fbanner .big{font-family:'Fredoka One',cursive;font-size:1.1rem;}
+.bsg{width:100%;margin-top:14px;padding:15px;background:linear-gradient(135deg,var(--green),var(--blue));color:#fff;border:none;border-radius:16px;cursor:pointer;font-family:'Fredoka One',cursive;font-size:1.15rem;box-shadow:0 6px 20px rgba(78,203,113,.35);transition:transform .15s,box-shadow .15s;}
+.bsg:hover{transform:translateY(-3px);box-shadow:0 10px 28px rgba(78,203,113,.45);}
+/* GAME */
+.gs{display:none;flex-direction:column;gap:13px;}
+.gs.active{display:flex;}
+/* XP */
+.xpw{background:#e0e0e0;border-radius:20px;height:14px;overflow:hidden;box-shadow:0 2px 6px rgba(0,0,0,.1)inset;}
+.xpf{height:100%;border-radius:20px;background:linear-gradient(90deg,var(--green),var(--blue));transition:width .5s cubic-bezier(.34,1.56,.64,1);}
+.xpl{text-align:center;font-size:.68rem;font-weight:800;color:#999;margin-top:3px;letter-spacing:1px;}
+/* CHAR */
+.ca{display:flex;align-items:center;gap:12px;background:#fff;border-radius:20px;padding:13px 15px;box-shadow:0 4px 16px rgba(0,0,0,.07);}
+.csp{font-size:3rem;animation:idle 2s ease-in-out infinite;filter:drop-shadow(0 4px 8px rgba(0,0,0,.15));}
+@keyframes idle{0%,100%{transform:translateY(0);}50%{transform:translateY(-5px);}}
+.cspeech{flex:1;background:#f7f0ff;border-radius:14px;padding:9px 13px;font-size:.83rem;font-weight:700;color:var(--ink);line-height:1.4;position:relative;}
+.cspeech::before{content:'◀';position:absolute;left:-11px;top:50%;transform:translateY(-50%);color:#f7f0ff;font-size:1.1rem;}
+/* Q CARD */
+.qc{background:linear-gradient(135deg,#7c3aed,#4da6ff);border-radius:24px;padding:22px 18px;text-align:center;box-shadow:0 8px 30px rgba(124,58,237,.25);position:relative;overflow:hidden;}
+.qc::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/svg%3E");}
+.ql{color:rgba(255,255,255,.75);font-size:.68rem;font-weight:800;letter-spacing:2px;text-transform:uppercase;margin-bottom:10px;}
+.db{font-family:'Fredoka One',cursive;font-size:clamp(2.2rem,9vw,3.8rem);color:#fff;letter-spacing:2px;text-shadow:0 4px 12px rgba(0,0,0,.2);display:inline-flex;align-items:baseline;gap:2px;margin-bottom:8px;}
+.di{color:#fff;}.dd{color:rgba(255,255,255,.7);}.dnp{color:var(--yellow);}.dp{color:#a5f3fc;position:relative;}
+.dp::after{content:'';position:absolute;top:0;left:0;right:0;border-top:3px solid #a5f3fc;border-radius:2px;}
+.qlg{display:flex;justify-content:center;gap:14px;flex-wrap:wrap;}
+.li{background:rgba(255,255,255,.15);backdrop-filter:blur(4px);border-radius:8px;padding:4px 11px;font-size:.7rem;font-weight:800;color:#fff;display:flex;align-items:center;gap:5px;}
+.ld{width:10px;height:10px;border-radius:50%;}
+/* GUIDE */
+.gc{background:#fff;border-radius:20px;padding:15px;box-shadow:0 4px 16px rgba(0,0,0,.07);}
+.gc h3{font-family:'Fredoka One',cursive;font-size:1rem;color:var(--ink);margin-bottom:10px;}
+.gsteps{display:flex;flex-direction:column;gap:6px;}
+.gstep{display:flex;align-items:center;gap:9px;padding:8px 12px;border-radius:12px;background:#f5f5f5;color:#bbb;font-size:.79rem;font-weight:700;transition:all .35s cubic-bezier(.34,1.56,.64,1);border:2px solid transparent;}
+.gstep.active{background:linear-gradient(90deg,#fef9ff,#f0f4ff);color:var(--ink);border-color:var(--purple2);transform:scale(1.02);}
+.gstep.done{background:#f0fff4;color:var(--green2);border-color:var(--green);}
+.gstep .gi{font-size:1.05rem;width:22px;text-align:center;}
+/* ANSWER */
+.ac{background:#fff;border-radius:20px;padding:19px;box-shadow:0 4px 16px rgba(0,0,0,.07);}
+.ac h3{font-family:'Fredoka One',cursive;font-size:1rem;color:var(--ink);margin-bottom:13px;text-align:center;}
+.fw{display:flex;align-items:center;justify-content:center;gap:15px;margin-bottom:15px;}
+.fc{display:flex;flex-direction:column;align-items:center;gap:5px;}
+.fi{width:108px;height:50px;border:3px solid #e0e0e0;border-radius:14px;font-family:'Fredoka One',cursive;font-size:1.5rem;text-align:center;color:var(--ink);background:#fafafa;outline:none;transition:all .2s;}
+.fi:focus{border-color:var(--purple);background:#fff;box-shadow:0 0 0 4px rgba(179,136,255,.15);transform:scale(1.03);}
+.fl{width:108px;height:4px;background:var(--ink);border-radius:3px;}
+.flbl{font-size:.63rem;font-weight:800;color:#aaa;letter-spacing:1px;text-transform:uppercase;}
+.eq{font-family:'Fredoka One',cursive;font-size:2.2rem;color:#ccc;}
+.dr{font-family:'Fredoka One',cursive;font-size:.95rem;color:var(--light-ink);background:#f3f0ff;border-radius:10px;padding:6px 12px;max-width:150px;text-align:center;line-height:1.3;}
+.hbtn{background:#fff9e6;border:2px solid var(--yellow);color:#b8860b;font-family:'Fredoka One',cursive;font-size:.88rem;padding:7px 16px;border-radius:12px;cursor:pointer;transition:all .2s;margin-bottom:9px;display:block;width:100%;}
+.hbtn:hover{background:var(--yellow);color:#6d3a00;}
+.hbox{display:none;background:linear-gradient(135deg,#fff9e6,#fff3cc);border:2px solid var(--yellow);border-radius:14px;padding:11px 13px;font-size:.8rem;font-weight:700;color:#7a5800;line-height:1.9;margin-bottom:11px;}
+.hbox.show{display:block;animation:popIn .3s cubic-bezier(.34,1.56,.64,1);}
+.hrow{display:flex;gap:8px;align-items:center;margin-bottom:1px;}
+.hbadge{background:var(--yellow);color:#6d3a00;border-radius:8px;padding:1px 8px;font-size:.68rem;flex-shrink:0;}
+.br{display:flex;gap:9px;}
+.bv{flex:2;padding:13px;background:linear-gradient(135deg,var(--green),#36c45a);color:#fff;border:none;border-radius:16px;cursor:pointer;font-family:'Fredoka One',cursive;font-size:1.05rem;box-shadow:0 5px 16px rgba(78,203,113,.35);transition:all .15s;}
+.bv:hover{transform:translateY(-3px);box-shadow:0 8px 22px rgba(78,203,113,.45);}
+.bsk{flex:1;padding:13px;background:#f5f5f5;color:#bbb;border:none;border-radius:16px;cursor:pointer;font-family:'Fredoka One',cursive;font-size:.92rem;transition:all .15s;}
+.bsk:hover{background:#ffe0e6;color:var(--pink);}
+/* FEEDBACK */
+.fbc{border-radius:20px;padding:19px;display:none;animation:popIn .35s cubic-bezier(.34,1.56,.64,1);}
+.fbc.show{display:block;}
+.fbc.ok{background:linear-gradient(135deg,#e8fff0,#d4f5e2);border:3px solid var(--green);}
+.fbc.bad{background:linear-gradient(135deg,#fff0f3,#ffe4ea);border:3px solid var(--pink);}
+.fbh{display:flex;align-items:center;gap:10px;margin-bottom:9px;}
+.fbe{font-size:2rem;animation:bonce .5s cubic-bezier(.34,1.56,.64,1);}
+@keyframes bonce{0%{transform:scale(0);}60%{transform:scale(1.2);}100%{transform:scale(1);}}
+.fbt{font-family:'Fredoka One',cursive;font-size:1.25rem;}
+.fbc.ok .fbt{color:var(--green2);}.fbc.bad .fbt{color:var(--pink);}
+.fbtx{font-size:.83rem;font-weight:700;color:#555;margin-bottom:10px;}
+.sol{background:#fff;border-radius:14px;padding:13px;font-size:.8rem;font-weight:700;line-height:2;color:var(--ink);}
+.sl{display:flex;align-items:center;gap:7px;margin-bottom:3px;}
+.si{font-size:.95rem;width:20px;}
+.sres{font-family:'Fredoka One',cursive;font-size:1.4rem;color:var(--purple);text-align:center;margin-top:7px;}
+.bnxt{width:100%;margin-top:11px;padding:13px;background:linear-gradient(135deg,var(--purple),var(--blue));color:#fff;border:none;border-radius:16px;cursor:pointer;font-family:'Fredoka One',cursive;font-size:1.05rem;box-shadow:0 5px 16px rgba(124,58,237,.3);transition:all .15s;}
+.bnxt:hover{transform:translateY(-3px);}
+/* GAME OVER */
+.gocard{display:none;background:#fff;border-radius:28px;padding:38px 22px;text-align:center;box-shadow:0 12px 40px rgba(0,0,0,.1);}
+.gocard.show{display:block;animation:popIn .4s cubic-bezier(.34,1.56,.64,1);}
+.goe{font-size:3.8rem;margin-bottom:10px;display:block;animation:idle 2s infinite;}
+.got{font-family:'Fredoka One',cursive;font-size:2rem;color:var(--purple);}
+.gosub{color:#aaa;font-size:.83rem;margin-bottom:18px;}
+.gosc{font-family:'Fredoka One',cursive;font-size:3.3rem;background:linear-gradient(135deg,var(--purple),var(--blue));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:6px;}
+.gost{font-size:1.8rem;margin-bottom:8px;}
+.gomsg{font-size:.95rem;font-weight:800;color:#666;margin-bottom:22px;}
+.brp{padding:15px 38px;background:linear-gradient(135deg,var(--green),var(--blue));color:#fff;border:none;border-radius:18px;cursor:pointer;font-family:'Fredoka One',cursive;font-size:1.15rem;box-shadow:0 6px 20px rgba(78,203,113,.35);transition:all .15s;}
+.brp:hover{transform:translateY(-3px);}
+/* CONFETTI */
+.cp{position:fixed;z-index:999;animation:cfFall 1.1s ease-in forwards;pointer-events:none;border-radius:2px;}
+@keyframes cfFall{0%{transform:translateY(-20px) rotate(0);opacity:1;}100%{transform:translateY(100vh) rotate(720deg);opacity:0;}}
+@keyframes popIn{from{opacity:0;transform:scale(.85);}to{opacity:1;transform:scale(1);}}
+@keyframes shake{0%,100%{transform:translateX(0);}25%{transform:translateX(-8px);}75%{transform:translateX(8px);}}
+.shake{animation:shake .3s ease;}
+</style>
+</head>
+<body>
+<div class="fe">🔢</div><div class="fe">➗</div><div class="fe">✨</div>
+<div class="fe">🧮</div><div class="fe">⭐</div><div class="fe">🎯</div>
+
+<div class="wrap">
+  <!-- HEADER -->
+  <div class="hdr">
+    <h1>🧙‍♂️ Cazador de Fracciones</h1>
+    <div class="tag">¡Convierte decimales periódicos mixtos en fracciones!</div>
+  </div>
+
+  <!-- STATS -->
+  <div class="sr">
+    <div class="sp l"><span class="si">❤️</span><div class="sv" id="livesVal">3</div><div class="sl">Vidas</div></div>
+    <div class="sp pt"><span class="si">⭐</span><div class="sv" id="scoreVal">0</div><div class="sl">Puntos</div></div>
+    <div class="sp st"><span class="si">🔥</span><div class="sv" id="streakVal">0</div><div class="sl">Racha</div></div>
+    <div class="sp lv"><span class="si">🏆</span><div class="sv" id="levelVal">1</div><div class="sl">Nivel</div></div>
+  </div>
+
+  <!-- TABS -->
+  <div class="tabs">
+    <button class="tb tl active" id="tabL" onclick="showTab('learn')">📖 Aprender</button>
+    <button class="tb tp" id="tabP" onclick="showTab('play')">🎮 ¡Jugar!</button>
+  </div>
+
+  <!-- TUTORIAL -->
+  <div class="tut active" id="learnSec">
+    <h2>🔮 El Método Mágico</h2>
+    <p class="intro">5 pasos para convertir cualquier decimal periódico mixto a fracción</p>
+
+    <div class="ts"><div class="tn">1</div><div class="tb2">
+      <h3>🔍 Identifica las partes</h3>
+      <p>Un decimal periódico <strong>mixto</strong> tiene una parte no-periódica <em>y</em> una que se repite.</p>
+      <div class="tbox">Ejemplo: <strong>2.<span class="ho">3</span><span class="hp" style="text-decoration:overline">45</span></strong><br>
+        Parte entera: <span class="ho">2</span><br>
+        No periódica (n=<strong>1</strong> cifra): <span class="ho">3</span><br>
+        Período (p=<strong>2</strong> cifras): <span class="hp">45</span></div>
+    </div></div>
+
+    <div class="ts"><div class="tn">2</div><div class="tb2">
+      <h3>🔑 El truco del denominador</h3>
+      <p>El denominador se construye con <strong>9s y 0s</strong>, ¡sin hacer ninguna multiplicación!</p>
+      <div class="tbox">
+        👉 Escribe un <span class="hp"><strong>9</strong></span> por <strong>cada cifra del período</strong><br>
+        👉 Luego un <span class="ho"><strong>0</strong></span> por <strong>cada cifra no periódica</strong><br><br>
+        Ejemplo: <strong>2.<span class="ho">3</span><span class="hp" style="text-decoration:overline">45</span></strong><br>
+        Período = <span class="hp">2 cifras</span> → <span class="hp">99</span><br>
+        No periódica = <span class="ho">1 cifra</span> → <span class="ho">0</span><br>
+        Denominador = <span class="hp">99</span><span class="ho">0</span> = <strong>990</strong> ✅
+      </div>
+    </div></div>
+
+    <div class="ts"><div class="tn">3</div><div class="tb2">
+      <h3>🔢 Calcula el numerador</h3>
+      <p>El numerador es la diferencia entre dos números enteros (sin la coma decimal):</p>
+      <div class="tbox">
+        <strong>Numerador</strong> = (todo el número sin coma) − (parte entera + no periódica)<br><br>
+        Ejemplo: <strong>2.<span class="ho">3</span><span class="hp">45</span>…</strong><br>
+        Todo sin coma → <span class="hp">2345</span><br>
+        Entera + no periódica → <span class="ho">23</span><br>
+        Numerador = <span class="hp">2345</span> − <span class="ho">23</span> = <span class="hg">2322</span>
+      </div>
+    </div></div>
+
+    <div class="ts"><div class="tn">4</div><div class="tb2">
+      <h3>🧩 Arma la fracción</h3>
+      <div class="tbox">
+        Numerador = <span class="hg">2322</span><br>
+        Denominador = <span class="hp">99</span><span class="ho">0</span> = <strong>990</strong><br><br>
+        Fracción sin simplificar: <strong>2322 / 990</strong>
+      </div>
+    </div></div>
+
+    <div class="ts"><div class="tn">5</div><div class="tb2">
+      <h3>✂️ Simplifica con el MCD</h3>
+      <div class="tbox">
+        MCD(2322, 990) = 18<br>
+        2322 ÷ 18 = 129 &nbsp;|&nbsp; 990 ÷ 18 = 55<br>
+        <span class="hg" style="font-size:1.05em">Resultado: 129 / 55 ✅</span>
+      </div>
+    </div></div>
+
+    <div class="fbanner">
+      <div class="big">⚡ REGLA MÁGICA ⚡</div>
+      📝 Numerador = todo sin coma − (entera + no periódica)<br>
+      🔑 Denominador = <strong>un 9 por cada cifra del período</strong> + <strong>un 0 por cada cifra no periódica</strong>
+    </div>
+    <button class="bsg" onclick="showTab('play')">🚀 ¡Empezar la aventura!</button>
+  </div>
+
+  <!-- GAME -->
+  <div class="gs" id="playSec">
+    <div>
+      <div class="xpw"><div class="xpf" id="xpBar" style="width:0%"></div></div>
+      <div class="xpl" id="xpLbl">Pregunta 0 · Nivel 1</div>
+    </div>
+    <div class="ca">
+      <div class="csp" id="charSprite">🧙‍♂️</div>
+      <div class="cspeech" id="charSpeech">¡Convierte este decimal periódico mixto en fracción irreducible!</div>
+    </div>
+    <div class="qc">
+      <div class="ql">✨ Convierte a fracción irreducible ✨</div>
+      <div>
+        <div class="db">
+          <span class="di" id="qInt"></span>
+          <span class="dd">.</span>
+          <span class="dnp" id="qNP"></span>
+          <span class="dp" id="qP"></span>
+        </div>
+      </div>
+      <div class="qlg">
+        <div class="li"><div class="ld" style="background:#fff"></div>Entera</div>
+        <div class="li"><div class="ld" style="background:var(--yellow)"></div>No periódica</div>
+        <div class="li"><div class="ld" style="background:#a5f3fc"></div>Período (overline)</div>
+      </div>
+    </div>
+    <div class="gc">
+      <h3>🗺️ Pasos del método</h3>
+      <div class="gsteps">
+        <div class="gstep active" id="gs0"><span class="gi">🔍</span>Identifica: cifras no periódicas y cifras del período</div>
+        <div class="gstep" id="gs1"><span class="gi">🔑</span>Denominador: un 9 por período + un 0 por no periódica</div>
+        <div class="gstep" id="gs2"><span class="gi">📝</span>Numerador = todo sin coma − (entera + no periódica)</div>
+        <div class="gstep" id="gs3"><span class="gi">🧩</span>Forma la fracción (sin simplificar aún)</div>
+        <div class="gstep" id="gs4"><span class="gi">✂️</span>Simplifica dividiendo por el MCD</div>
+      </div>
+    </div>
+    <div class="ac">
+      <h3>✏️ Escribe tu respuesta</h3>
+      <div class="fw">
+        <div class="fc">
+          <div class="flbl">Numerador</div>
+          <input class="fi" type="number" id="inpN" placeholder="?" oninput="onInp(2)">
+          <div class="fl"></div>
+          <input class="fi" type="number" id="inpD" placeholder="?" oninput="onInp(3)">
+          <div class="flbl">Denominador</div>
+        </div>
+        <div class="eq">=</div>
+        <div class="dr" id="decRef">...</div>
+      </div>
+      <button class="hbtn" id="hintBtn" onclick="toggleHint()">💡 ¿Necesitas una pista?</button>
+      <div class="hbox" id="hintBox"></div>
+      <div class="br">
+        <button class="bv" onclick="check()">✅ ¡Verificar!</button>
+        <button class="bsk" onclick="skip()">⏭ Saltar</button>
+      </div>
+    </div>
+    <div class="fbc" id="fbCard">
+      <div class="fbh">
+        <span class="fbe" id="fbEmoji"></span>
+        <span class="fbt" id="fbTitle"></span>
+      </div>
+      <p class="fbtx" id="fbTxt"></p>
+      <div class="sol" id="fbSol"></div>
+      <button class="bnxt" onclick="next()">➡️ Siguiente pregunta</button>
+    </div>
+  </div>
+
+  <!-- GAME OVER -->
+  <div class="gocard" id="goCard">
+    <span class="goe" id="goEmo">😅</span>
+    <div class="got">¡Fin del juego!</div>
+    <div class="gosub">Se acabaron las vidas</div>
+    <div class="gosc" id="goSc">0</div>
+    <div class="gost" id="goSt">⭐</div>
+    <div class="gomsg" id="goMsg">¡Sigue practicando!</div>
+    <button class="brp" onclick="restart()">🔄 ¡Jugar de nuevo!</button>
+  </div>
+</div>
+
+<script>
+function gcd(a,b){a=Math.abs(a);b=Math.abs(b);while(b){[a,b]=[b,a%b];}return a;}
+const SP={
+  start:["¡Convierte este decimal periódico mixto en fracción irreducible!","¡A ver si puedes con este! 🎯","¡Ojo con el período! 👀","¡Recuerda la fórmula mágica ✨","¡Tú puedes, campeón! 💪"],
+  ok:["¡INCREÍBLE! ¡Lo lograste! 🎉","¡Perfecto! ¡Eres un genio! 🌟","¡Exacto! ¡Así se hace! 🔥","¡Brillante! ¡Sigue así! ⚡","¡WOOOOW! ¡Respuesta perfecta! 🏆"],
+  bad:["¡No te rindas! Repasa los pasos 💪","¡Casi! Revisa el método 🔍","¡Sigue intentando! 🌈","¡Ups! Recuerda la fórmula ✨"],
+  hint:["¡Aquí va tu pista! 💡","¡Un pequeño empujón! 🤝","¡No se lo digas a nadie! 🤫"]
+};
+function rs(t){const a=SP[t];return a[Math.floor(Math.random()*a.length)];}
+function gen(lvl){
+  const n=lvl<=2?1:lvl<=4?1:2, p=lvl<=2?1:2;
+  const intg=Math.floor(Math.random()*(lvl>3?8:4));
+  let np=Math.floor(Math.random()*Math.pow(10,n));
+  let per; do{per=Math.floor(Math.random()*Math.pow(10,p));}while(!per);
+  const nps=String(np).padStart(n,'0'), ps=String(per).padStart(p,'0');
+  const pw1=Math.pow(10,n+p),pw2=Math.pow(10,n);
+  const full=intg*pw1+np*Math.pow(10,p)+per;
+  const npi=intg*pw2+np;
+  const rn=full-npi, rd=pw1-pw2, g=gcd(rn,rd);
+  return{intg,np:nps,per:ps,n,p,rn,rd,num:rn/g,den:rd/g};
+}
+let S={sc:0,lv:3,st:0,lv2:1,q:0,cur:null,hu:false};
+function ui(){
+  document.getElementById('livesVal').textContent=S.lv;
+  document.getElementById('scoreVal').textContent=S.sc;
+  document.getElementById('streakVal').textContent=S.st;
+  document.getElementById('levelVal').textContent=S.lv2;
+  document.getElementById('xpBar').style.width=(Math.min(S.q%5,5)/5*100)+'%';
+  document.getElementById('xpLbl').textContent=`Pregunta ${S.q} · Nivel ${S.lv2}`;
+}
+function loadQ(){
+  S.cur=gen(S.lv2); S.hu=false;
+  const c=S.cur;
+  document.getElementById('qInt').textContent=c.intg;
+  document.getElementById('qNP').textContent=c.np;
+  document.getElementById('qP').textContent=c.per;
+  document.getElementById('decRef').innerHTML=`${c.intg}.<span style="color:var(--yellow)">${c.np}</span><span style="color:var(--purple2);text-decoration:overline">${c.per}</span>`;
+  document.getElementById('inpN').value='';
+  document.getElementById('inpD').value='';
+  document.getElementById('inpN').disabled=false;
+  document.getElementById('inpD').disabled=false;
+  document.getElementById('hintBox').classList.remove('show');
+  document.getElementById('hintBtn').textContent='💡 ¿Necesitas una pista?';
+  document.getElementById('fbCard').className='fbc';
+  for(let i=0;i<5;i++){const e=document.getElementById('gs'+i);e.className='gstep'+(i===0?' active':'');}
+  document.getElementById('charSprite').textContent='🧙‍♂️';
+  document.getElementById('charSpeech').textContent=rs('start');
+  buildHint(); ui();
+}
+function buildHint(){
+  const c=S.cur, g=gcd(c.rn,c.rd);
+  const nines='9'.repeat(c.p), zeros='0'.repeat(c.n);
+  const denStr = nines+zeros;
+  document.getElementById('hintBox').innerHTML=`
+    <div class="hrow"><span class="hbadge">Período</span>${c.p} cifra(s) → escribe ${c.p} nueve(s): <strong>${nines}</strong></div>
+    <div class="hrow"><span class="hbadge">No periódica</span>${c.n} cifra(s) → escribe ${c.n} cero(s): <strong>${zeros||'(ninguno)'}</strong></div>
+    <div class="hrow"><span class="hbadge">Denominador</span><strong>${nines}</strong>${zeros} = <strong>${c.rd}</strong></div>
+    <div class="hrow"><span class="hbadge">Todo sin coma</span>${c.intg*Math.pow(10,c.n+c.p)+parseInt(c.np)*Math.pow(10,c.p)+parseInt(c.per)}</div>
+    <div class="hrow"><span class="hbadge">Entera + no per.</span>${c.intg*Math.pow(10,c.n)+parseInt(c.np)}</div>
+    <div class="hrow"><span class="hbadge">Numerador</span><strong>${c.rn}</strong></div>
+    <div class="hrow"><span class="hbadge">MCD</span>${g}</div>`;
+}
+function toggleHint(){
+  S.hu=true;
+  const b=document.getElementById('hintBox');
+  b.classList.toggle('show');
+  document.getElementById('hintBtn').textContent=b.classList.contains('show')?'🙈 Ocultar pista':'💡 ¿Necesitas una pista?';
+  document.getElementById('charSpeech').textContent=rs('hint');
+}
+function onInp(step){
+  for(let i=0;i<5;i++){const e=document.getElementById('gs'+i);e.className='gstep'+(i<step?' done':i===step?' active':'');}
+}
+function solHTML(c){
+  const g=gcd(c.rn,c.rd);
+  const nines='9'.repeat(c.p), zeros='0'.repeat(c.n);
+  const todo = c.intg*Math.pow(10,c.n+c.p)+parseInt(c.np)*Math.pow(10,c.p)+parseInt(c.per);
+  const noPerPart = c.intg*Math.pow(10,c.n)+parseInt(c.np);
+  return`<div class="sl"><span class="si">🔍</span>Período = <strong>${c.p}</strong> cifra(s) → <strong>${nines}</strong> &nbsp;|&nbsp; No periódica = <strong>${c.n}</strong> cifra(s) → <strong>${zeros||'0 ceros'}</strong></div>
+    <div class="sl"><span class="si">🔑</span>Denominador = <strong>${nines}${zeros}</strong> = <strong>${c.rd}</strong></div>
+    <div class="sl"><span class="si">📝</span>Numerador = <strong>${todo}</strong> − <strong>${noPerPart}</strong> = <strong>${c.rn}</strong></div>
+    <div class="sl"><span class="si">✂️</span>MCD(${c.rn}, ${c.rd}) = ${g} → simplifica</div>
+    <div class="sres">${c.num} / ${c.den}</div>`;
+}
+function check(){
+  const nv=parseInt(document.getElementById('inpN').value);
+  const dv=parseInt(document.getElementById('inpD').value);
+  if(isNaN(nv)||isNaN(dv)||!dv){alert('Ingresa numerador y denominador válidos 😅');return;}
+  const g=gcd(Math.abs(nv),Math.abs(dv)), un=nv/g, ud=dv/g;
+  const c=S.cur;
+  const ok=(un===c.num&&ud===c.den)||(un===-c.num&&ud===-c.den);
+  document.getElementById('inpN').disabled=true;
+  document.getElementById('inpD').disabled=true;
+  for(let i=0;i<5;i++){document.getElementById('gs'+i).className='gstep done';}
+  const fb=document.getElementById('fbCard');
+  if(ok){
+    const pts=S.hu?5:10+S.st*3;
+    S.sc+=pts; S.st++; S.q++;
+    if(S.st>=3&&S.lv2<5)S.lv2++;
+    fb.className='fbc show ok';
+    document.getElementById('fbEmoji').textContent='🎉';
+    document.getElementById('fbTitle').textContent=`¡Correcto! +${pts} pts`;
+    document.getElementById('fbTxt').textContent=['¡Bien hecho!','¡Excelente!','¡Impresionante!','¡Brillante!'][Math.floor(Math.random()*4)];
+    document.getElementById('fbSol').innerHTML=solHTML(c);
+    document.getElementById('charSpeech').textContent=rs('ok');
+    document.getElementById('charSprite').textContent='🥳';
+    confetti();
+  }else{
+    S.lv--; S.st=0;
+    fb.className='fbc show bad';
+    document.getElementById('fbEmoji').textContent='😅';
+    document.getElementById('fbTitle').textContent='¡Inténtalo de nuevo!';
+    document.getElementById('fbTxt').textContent='La respuesta correcta era:';
+    document.getElementById('fbSol').innerHTML=solHTML(c);
+    document.getElementById('charSpeech').textContent=rs('bad');
+    document.getElementById('charSprite').textContent='😢';
+    ui();
+    if(S.lv<=0){setTimeout(showGO,1500);return;}
+  }
+  ui();
+}
+function skip(){S.st=0;ui();loadQ();}
+function next(){loadQ();}
+function showGO(){
+  document.getElementById('playSec').style.display='none';
+  const gc=document.getElementById('goCard');
+  gc.className='gocard show';
+  document.getElementById('goSc').textContent=S.sc+' pts';
+  const em=['😅','🙂','😊','😄','🤩'];
+  const st=['⭐','⭐⭐','⭐⭐⭐','⭐⭐⭐⭐','⭐⭐⭐⭐⭐'];
+  const ms=['¡Sigue practicando!','¡Buen intento!','¡Bien hecho!','¡Excelente!','¡Eres un maestro!'];
+  const idx=Math.min(Math.floor(S.sc/20),4);
+  document.getElementById('goEmo').textContent=em[idx];
+  document.getElementById('goSt').textContent=st[idx];
+  document.getElementById('goMsg').textContent=ms[idx];
+}
+function restart(){
+  S={sc:0,lv:3,st:0,lv2:1,q:0,cur:null,hu:false};
+  document.getElementById('goCard').className='gocard';
+  document.getElementById('playSec').style.display='flex';
+  loadQ();
+}
+function confetti(){
+  const cols=['#ffd93d','#4ecb71','#4da6ff','#ff6b9d','#b388ff','#ff9f1c','#a5f3fc'];
+  for(let i=0;i<45;i++){
+    const el=document.createElement('div');
+    el.className='cp';
+    el.style.cssText=`left:${Math.random()*100}vw;top:${Math.random()*30+10}vh;background:${cols[Math.floor(Math.random()*cols.length)]};width:${Math.random()*10+6}px;height:${Math.random()*10+6}px;animation-delay:${Math.random()*.3}s;animation-duration:${Math.random()*.8+.8}s;transform:rotate(${Math.random()*360}deg);`;
+    document.body.appendChild(el);
+    el.addEventListener('animationend',()=>el.remove());
+  }
+}
+function showTab(tab){
+  const isl=tab==='learn';
+  document.getElementById('learnSec').className='tut'+(isl?' active':'');
+  document.getElementById('playSec').style.display=isl?'none':'flex';
+  document.getElementById('tabL').className='tb tl'+(isl?' active':'');
+  document.getElementById('tabP').className='tb tp'+(isl?'':' active');
+  if(!isl&&!S.cur)loadQ();
+}
+</script>
+</body>
+</html>
